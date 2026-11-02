@@ -4,8 +4,8 @@ from ..Parser.Token import *
 # larger things such as blocks for functions are handled in later stages
 def combineIfPossibleStage1(tokenList: list[Token]) -> Token | InternalToken:
     if len(tokenList) != 0:
-        if tokenList[0] == CallKeyword:
-            # call statement is currently the only single statement with variable arguments
+        if isinstance(tokenList[0], CallKeyword):
+            # call statement and function declarations are the only sattements with variable arguments at present
             if len(tokenList) < 2:
                 return InternalErrorToken("call statement without a function name")
 
@@ -13,8 +13,21 @@ def combineIfPossibleStage1(tokenList: list[Token]) -> Token | InternalToken:
 
             for tk in tokenList[2:]:
                 argString += tk.stringContent
+                argString += " "
 
-            return CallStatement(argString)
+            return CallStatement(argString, [tokenList[1]])
+
+        elif isinstance(tokenList[0], FunctionKeyword):
+            if len(tokenList) < 2:
+                return InternalErrorToken("function declaration without a name")
+
+            argString = ""
+
+            for tk in tokenList[2:]:
+                argString += tk.stringContent
+                argString += " "
+
+            return DeclaringFunction(argString, [tokenList[1]])
 
     if len(tokenList) == 1:
         # ideally just single character tokens
@@ -31,9 +44,6 @@ def combineIfPossibleStage1(tokenList: list[Token]) -> Token | InternalToken:
 
         if isinstance(tokenList[0], FloatKeyword):
             return DeclaringFloat(tokenList[1].stringContent)
-
-        if isinstance(tokenList[0], FunctionKeyword):
-            return DeclaringFunction(tokenList[1].stringContent)
 
         if isinstance(tokenList[0], ImportKeyword):
             return DeclaringImport(tokenList[1].stringContent)

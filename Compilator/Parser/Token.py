@@ -1,7 +1,9 @@
 class Token:
-    def __init__(self, stringContent: str ="", subTokens: list | None = None):
+    def __init__(self, stringContent: str ="", subTokens: list | None = None, originalSourceLine: int = 0):
         self.stringContent = stringContent
         self.subTokens = subTokens if subTokens is not None else list()
+
+        self.originalSourceLine = originalSourceLine
 
 # keywords
 

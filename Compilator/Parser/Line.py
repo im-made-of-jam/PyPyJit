@@ -1,7 +1,7 @@
 from .Token import *
 from .Keywords import *
 
-def tokeniseLine(line: str) -> list[Token]:
+def tokeniseLine(line: str, number: int) -> list[Token]:
     line = line.strip()
 
     splitLine = line.split()

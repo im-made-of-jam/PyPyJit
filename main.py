@@ -16,11 +16,11 @@ with open("test.pyj") as openFile:
 
     fileLines = [line.strip() for line in fileLines]
 
-for line in fileLines:
+for count, line in enumerate(fileLines):
     if line == "":
         continue
 
-    fileTokens.append(Compilator.Processing.Combinator.combineIfPossibleStage1(Compilator.Parser.Line.tokeniseLine(line)))
+    fileTokens.append(Compilator.Processing.Combinator.combineIfPossibleStage1(Compilator.Parser.Line.tokeniseLine(line, count)))
 
 stage2 = Compilator.Processing.Combinator.combineIfPossibleStage2(fileTokens)
 
