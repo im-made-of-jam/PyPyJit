@@ -1,0 +1,17 @@
+func main
+{
+    import kernel32.ExitProcess
+
+    int x
+    x = 3
+
+    label before
+    if x
+    {
+        int one
+        one = 1
+        x - one
+        goto before
+    }
+    call kernel32.ExitProcess
+}
