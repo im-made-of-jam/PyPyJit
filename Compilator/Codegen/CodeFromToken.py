@@ -4,7 +4,6 @@ from ..Memory import SlotPageTracker, CodePageTracker, allocationSize, valueOfPo
 from ..Memory import MEM_COMMIT, MEM_RESERVE, PAGE_READWRITE, PAGE_EXECUTE_READWRITE
 
 # each of these should be at least eight bytes for the sake of easy alignment at the moment
-labelMemoryLocations: dict[str, int] = {}
 variableMemoryLocations: dict[str, int] = {}
 
 # pages used for 8 byte memory slots, for varaiables and labels
@@ -30,14 +29,7 @@ def getNewMemorySlot() -> int:
 
     return newPage
 
-def getNewLabelSlotLocation(name: str) -> int:
-    # get a new slot for a label
-    if name not in labelMemoryLocations:
-        labelMemoryLocations[name] = getNewMemorySlot()
-
-    return labelMemoryLocations[name]
-
-def getVariableSlotLocation(name: str) -> int:
+def getNewSlotLocation(name: str) -> int:
     # get a new slot for a variable
     if name not in variableMemoryLocations:
         variableMemoryLocations[name] = getNewMemorySlot()
