@@ -5,33 +5,33 @@ def verifyLabels(tokenList: list[Token | InternalToken], labelsList=[], function
     # also checks that goto statements have a valid label as their jump target
 
     # first pass to fetch all labels
-    def collectLabels(tkList, labelsList, functionList):
+    def collectLabels(tkList, lblList=labelsList, fnList=functionList):
         for tk in tkList:
             if isinstance(tk, DeclaringLabel):
-                if tk.stringContent in labelsList:
+                if tk.stringContent in lblList:
                     print(f"duplicate label definition with name: {tk.stringContent} on line {tk.originalSourceLine}")
                     return False
 
-                print(f"new label: {tk.stringContent}")
-
-                labelsList.append(tk.stringContent)
+                lblList.append(tk.stringContent)
 
             if isinstance(tk, DeclaringFunction):
-                if tk.stringContent in functionList:
+                if tk.stringContent in fnList:
                     print(f"duplicate function definition with name: {tk.stringContent} on line {tk.originalSourceLine}")
                     return False
 
-                functionList.append(tk.stringContent)
+                fnList.append(tk.stringContent)
 
             if isinstance(tk, DeclaringImport):
-                if tk.stringContent in functionList:
+                if tk.stringContent in fnList:
                     print(f"duplicate function definition with name: {tk.stringContent} on line {tk.originalSourceLine}")
                     return False
 
-                functionList.append(tk.stringContent)
+                fnList.append(tk.stringContent)
 
             if len(tk.subTokens):
-                collectLabels(tk.subTokens, labelsList, functionList)
+                collectLabels(tk.subTokens, lblList, fnList)
+
+    collectLabels(tokenList)
 
     # now have a list of all function names and label names
     # so go through it all again to ensure jump targets area valid
