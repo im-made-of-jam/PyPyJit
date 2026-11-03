@@ -10,5 +10,6 @@ def tokeniseLine(line: str, number: int) -> list[Token]:
 
     for word in splitLine:
         tokenList.append(getTokenFromWord(word))
+        tokenList[-1].originalSourceLine = number
 
     return tokenList
