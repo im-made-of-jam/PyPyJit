@@ -10,6 +10,9 @@ class Token:
 class FunctionKeyword(Token):
     pass
 
+class ReturnKeyword(Token):
+    pass
+
 class ImportKeyword(Token):
     pass
 

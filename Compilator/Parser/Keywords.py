@@ -8,6 +8,7 @@ _keywordList = {
     "goto":GotoKeyword,     # immediately transfer execution to the position immediately following a label
     "call":CallKeyword,     # calls a function declared with "func" or imported. arguments must be variables, not literals
     "is":IsKeyword,         # same as "==" in other languages. currently unable to be used with literals
+    "return":ReturnKeyword,
 
     "int":IntegerKeyword,   # declares a 64 bit signed integer
     "float":FloatKeyword,   # declares a 64 bit IEEE float
