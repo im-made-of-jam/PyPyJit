@@ -1,34 +1,37 @@
 from ..Parser.Token import *
 
-def VerifyLabels(tokenList: list[Token | InternalToken]) -> bool:
+def verifyLabels(tokenList: list[Token | InternalToken], labelsList=[], functionList=[]) -> bool:
     # checks that all call statements have the name of either an import or a function declaration
     # also checks that goto statements have a valid label as their jump target
 
-    labelsList = []
-    functionList = []
-
     # first pass to fetch all labels
-    for tk in tokenList:
-        if isinstance(tk, LabelKeyword):
-            if tk.stringContent in labelsList:
-                print(f"duplicate label definition with name: {tk.stringContent} on line {tk.originalSourceLine}")
-                return False
+    def collectLabels(tkList, labelsList, functionList):
+        for tk in tkList:
+            if isinstance(tk, DeclaringLabel):
+                if tk.stringContent in labelsList:
+                    print(f"duplicate label definition with name: {tk.stringContent} on line {tk.originalSourceLine}")
+                    return False
 
-            labelsList.append(tk.stringContent)
+                print(f"new label: {tk.stringContent}")
 
-        if isinstance(tk, DeclaringFunction):
-            if tk.stringContent in functionList:
-                print(f"duplicate function definition with name: {tk.stringContent} on line {tk.originalSourceLine}")
-                return False
+                labelsList.append(tk.stringContent)
 
-            functionList.append(tk.stringContent)
+            if isinstance(tk, DeclaringFunction):
+                if tk.stringContent in functionList:
+                    print(f"duplicate function definition with name: {tk.stringContent} on line {tk.originalSourceLine}")
+                    return False
 
-        if isinstance(tk, DeclaringImport):
-            if tk.stringContent in functionList:
-                print(f"duplicate function definition with name: {tk.stringContent} on line {tk.originalSourceLine}")
-                return False
+                functionList.append(tk.stringContent)
 
-            functionList.append(tk.stringContent)
+            if isinstance(tk, DeclaringImport):
+                if tk.stringContent in functionList:
+                    print(f"duplicate function definition with name: {tk.stringContent} on line {tk.originalSourceLine}")
+                    return False
+
+                functionList.append(tk.stringContent)
+
+            if len(tk.subTokens):
+                collectLabels(tk.subTokens, labelsList, functionList)
 
     # now have a list of all function names and label names
     # so go through it all again to ensure jump targets area valid
